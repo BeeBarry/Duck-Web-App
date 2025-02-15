@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duck.Api", "Duck.Api\Duck.Api.csproj", "{40B5D011-7B1A-40F5-86C5-91F7B796797A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duck.Core", "Duck.Core\Duck.Core.csproj", "{F968D707-AB76-4E61-B3C0-2AEC12D0BE7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duck.Infrastructure", "Duck.Infrastructure\Duck.Infrastructure.csproj", "{49A3BAAC-2D87-4F97-9977-AC00BAFED080}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40B5D011-7B1A-40F5-86C5-91F7B796797A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B5D011-7B1A-40F5-86C5-91F7B796797A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B5D011-7B1A-40F5-86C5-91F7B796797A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B5D011-7B1A-40F5-86C5-91F7B796797A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F968D707-AB76-4E61-B3C0-2AEC12D0BE7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F968D707-AB76-4E61-B3C0-2AEC12D0BE7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F968D707-AB76-4E61-B3C0-2AEC12D0BE7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F968D707-AB76-4E61-B3C0-2AEC12D0BE7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
