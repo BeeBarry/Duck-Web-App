@@ -1,3 +1,5 @@
+using Duck.Core.DTOs.Duck;
+using Duck.Core.DTOs.Quote;
 using Duck.Core.Interfaces;
 using Duck.Core.Models;
 using Duck.Infrastructure.Data;
@@ -14,109 +16,263 @@ public class DuckRepository : IDuckRepository
         _context = context;
     }
 
-    // Huvudfunktionalitet för användarflödet
-    // Hämtar alla ankor med deras tillhörande quotes för att visa i listan
-    public async Task<IEnumerable<Core.Models.Duck>> GetAllAsync()
+    // Admin funnktioner
+    public async Task<IEnumerable<DuckDto>> GetAllDucksAsync()
     {
-        return await _context.Ducks
+        var ducks = await _context.Ducks
             .Include(d => d.Quotes)
             .ToListAsync();
+
+        return ducks.Select(d => new DuckDto
+        {
+            Id = d.Id,
+            Name = d.Name,
+            Specialty = d.Specialty,
+            Personality = d.Personality,
+            Motto = d.Motto,
+            Quotes = new QuotesByTypeDto
+            {
+                WiseQuotes = d.Quotes
+                    .Where(q => q.Type == QuoteType.Wise)
+                    .Select(q => new QuoteDto
+                    {
+                        Id = q.QuoteId,
+                        Content = q.Content,
+                        Type = q.Type
+                    })
+                    .ToList(),
+                ComicalQuotes = d.Quotes
+                    .Where(q => q.Type == QuoteType.Comical)
+                    .Select(q => new QuoteDto
+                    {
+                        Id = q.QuoteId,
+                        Content = q.Content,
+                        Type = q.Type
+                    })
+                    .ToList(),
+                DarkQuotes = d.Quotes
+                    .Where(q => q.Type == QuoteType.Dark)
+                    .Select(q => new QuoteDto
+                    {
+                        Id = q.QuoteId,
+                        Content = q.Content,
+                        Type = q.Type
+                    })
+                    .ToList()
+            }
+        });
     }
 
-    // Kärnfunktionen för applikationen
-    // Hämtar ett slumpmässigt quote av specifik typ från en vald anka
-    public async Task<Quote?> GetRandomQuoteByTypeAsync(int duckId, QuoteType type)
+    public async Task<DuckDto?> GetDuckByIdAsync(int id)
     {
-        // Räknar bara antalet quotes (mycket snabbare än att ladda alla)
-        var quotesCount = await _context.Quotes
-            .Where(q => q.DuckId == duckId && q.Type == type)
-            .CountAsync();
-
-        if (quotesCount == 0) return null;
-
-        var random = new Random();
-        var skipCount = random.Next(quotesCount);
-
-        // Hämtar bara EN quote från databasen
-        return await _context.Quotes
-            .Where(q => q.DuckId == duckId && q.Type == type)
-            .Skip(skipCount)
-            .FirstOrDefaultAsync();
-    }
-
-    // Administrationsfunktioner för att hantera data
-    // Hämtar en specifik anka med alla dess quotes för redigering
-    public async Task<Core.Models.Duck?> GetByIdAsync(int id)
-    {
-        return await _context.Ducks
+        var duck = await _context.Ducks
             .Include(d => d.Quotes)
             .FirstOrDefaultAsync(d => d.Id == id);
+
+        if (duck == null) return null;
+
+        return new DuckDto
+        {
+            Id = duck.Id,
+            Name = duck.Name,
+            Specialty = duck.Specialty,
+            Personality = duck.Personality,
+            Motto = duck.Motto,
+            Quotes = new QuotesByTypeDto
+            {
+                WiseQuotes = duck.Quotes
+                    .Where(q => q.Type == QuoteType.Wise)
+                    .Select(q => new QuoteDto
+                    {
+                        Id = q.QuoteId,
+                        Content = q.Content,
+                        Type = q.Type
+                    })
+                    .ToList(),
+                ComicalQuotes = duck.Quotes
+                    .Where(q => q.Type == QuoteType.Comical)
+                    .Select(q => new QuoteDto
+                    {
+                        Id = q.QuoteId,
+                        Content = q.Content,
+                        Type = q.Type
+                    })
+                    .ToList(),
+                DarkQuotes = duck.Quotes
+                    .Where(q => q.Type == QuoteType.Dark)
+                    .Select(q => new QuoteDto
+                    {
+                        Id = q.QuoteId,
+                        Content = q.Content,
+                        Type = q.Type
+                    })
+                    .ToList()
+            }
+        };
     }
 
-    // Lägger till en ny anka i systemet
-    public async Task<Core.Models.Duck> AddAsync(Core.Models.Duck duck)
+    public async Task<DuckDto> CreateDuckAsync(CreateDuckDto createDto)
     {
+        var duck = new Core.Models.Duck
+        {
+            Name = createDto.Name,
+            Specialty = createDto.Specialty,
+            Personality = createDto.Personality,
+            Motto = createDto.Motto
+        };
+
         _context.Ducks.Add(duck);
         await _context.SaveChangesAsync();
-        return duck;
+
+        return new DuckDto
+        {
+            Id = duck.Id,
+            Name = duck.Name,
+            Specialty = duck.Specialty,
+            Personality = duck.Personality,
+            Motto = duck.Motto,
+            Quotes = new QuotesByTypeDto()
+        };
     }
 
-    // Uppdaterar en existerande ankas information
-    public async Task<Core.Models.Duck?> UpdateAsync(Core.Models.Duck duck, bool updateQuotes = false)
+    public async Task<DuckDto?> UpdateDuckAsync(int id, UpdateDuckDto updateDto)
     {
-        var existingDuck = await GetByIdAsync(duck.Id);
-        if (existingDuck == null) return null;
+        var duck = await _context.Ducks
+            .Include(d => d.Quotes)
+            .FirstOrDefaultAsync(d => d.Id == id);
 
-        // Uppdatera endast de properties som skickats med
-        if (!string.IsNullOrEmpty(duck.Name))
-            existingDuck.Name = duck.Name;
-        if (!string.IsNullOrEmpty(duck.Personality))
-            existingDuck.Personality = duck.Personality;
-        if (!string.IsNullOrEmpty(duck.Motto))
-            existingDuck.Motto = duck.Motto;
-        if (!string.IsNullOrEmpty(duck.Specialty))
-            existingDuck.Specialty = duck.Specialty;
+        if (duck == null) return null;
 
-        // Hantera quotes ENDAST om det explicit begärs
-        if (updateQuotes && duck.Quotes.Any())
-        {
-            foreach (var newQuote in duck.Quotes)
-            {
-                var existingQuote = existingDuck.Quotes
-                    .FirstOrDefault(q => q.QuoteId == newQuote.QuoteId);
-
-                if (existingQuote != null)
-                {
-                    // Uppdatera befintligt quote
-                    existingQuote.Content = newQuote.Content;
-                    existingQuote.Type = newQuote.Type;
-                }
-            }
-        }
+        // Uppdatera endast de fält som inte är null
+        if (updateDto.Name != null)
+            duck.Name = updateDto.Name;
+        if (updateDto.Specialty != null)
+            duck.Specialty = updateDto.Specialty;
+        if (updateDto.Personality != null)
+            duck.Personality = updateDto.Personality;
+        if (updateDto.Motto != null)
+            duck.Motto = updateDto.Motto;
 
         await _context.SaveChangesAsync();
-        return existingDuck;
+
+        return await GetDuckByIdAsync(id);
     }
 
-    // Tar bort en anka och alla dess tillhörande quotes
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteDuckAsync(int id)
     {
-        // Hämta ankan OCH dess quotes
         var duck = await _context.Ducks
             .Include(d => d.Quotes)
             .FirstOrDefaultAsync(d => d.Id == id);
 
         if (duck == null) return false;
 
-        // Ta först bort alla quotes
-        foreach (var quote in duck.Quotes)
-        {
-            _context.Quotes.Remove(quote);
-        }
-
-        // Ta sedan bort ankan
         _context.Ducks.Remove(duck);
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<QuoteDto> AddQuoteAsync(int duckId, CreateQuoteDto createDto)
+    {
+        var duck = await _context.Ducks.FindAsync(duckId);
+        if (duck == null) 
+            throw new ArgumentException($"Ingen anka hittades med ID {duckId}");
+
+        var quote = new Quote
+        {
+            Content = createDto.Content,
+            Type = createDto.Type,
+            DuckId = duckId
+        };
+
+        _context.Quotes.Add(quote);
+        await _context.SaveChangesAsync();
+
+        return new QuoteDto
+        {
+            Id = quote.QuoteId,
+            Content = quote.Content,
+            Type = quote.Type
+        };
+    }
+
+    public async Task<QuoteDto?> UpdateQuoteAsync(int quoteId, UpdateQuoteDto updateDto)
+    {
+        var quote = await _context.Quotes.FindAsync(quoteId);
+        if (quote == null) return null;
+
+        quote.Content = updateDto.Content;
+        await _context.SaveChangesAsync();
+
+        return new QuoteDto
+        {
+            Id = quote.QuoteId,
+            Content = quote.Content,
+            Type = quote.Type
+        };
+    }
+
+    public async Task<bool> DeleteQuoteAsync(int quoteId)
+    {
+        var quote = await _context.Quotes.FindAsync(quoteId);
+        if (quote == null) return false;
+
+        _context.Quotes.Remove(quote);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    
+    
+    // USER funktioner
+    
+    public async Task<IEnumerable<DuckPreviewDto>> GetAllDuckPreviewsAsync()
+    {
+        return await _context.Ducks
+            .Select(d => new DuckPreviewDto
+            {
+                Id = d.Id,
+                Name = d.Name,
+                Specialty = d.Specialty,
+                Personality = d.Personality,
+                Motto = d.Motto
+            })
+            .ToListAsync();
+    }
+
+    public async Task<DuckPreviewDto?> GetDuckPreviewAsync(int id)
+    {
+        return await _context.Ducks
+            .Where(d => d.Id == id)
+            .Select(d => new DuckPreviewDto
+            {
+                Id = d.Id,
+                Name = d.Name,
+                Specialty = d.Specialty,
+                Personality = d.Personality,
+                Motto = d.Motto
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<RandomQuoteDto?> GetRandomQuoteAsync(int duckId, QuoteType type)
+    {
+        // Hämta alla quotes av den specifika typen för den valda ankan
+        var quotes = await _context.Quotes
+            .Where(q => q.DuckId == duckId && q.Type == type)
+            .Include(q => q.Duck)  // Vi behöver ankans namn för responsen
+            .ToListAsync();
+
+        if (!quotes.Any()) return null;
+
+        // Välj ett slumpmässigt quote
+        var random = new Random();
+        var randomQuote = quotes[random.Next(quotes.Count)];
+
+        return new RandomQuoteDto
+        {
+            Content = randomQuote.Content,
+            DuckName = randomQuote.Duck.Name,
+            Type = randomQuote.Type
+        };
+    }
+    
 }
