@@ -1,16 +1,23 @@
+using Duck.Core.DTOs.Duck;
+using Duck.Core.DTOs.Quote;
 using Duck.Core.Models;
 
 namespace Duck.Core.Interfaces;
 
 public interface IDuckRepository
 {
-    // Huvudfunktionalitet
-    Task<IEnumerable<Core.Models.Duck>> GetAllAsync();
-    Task<Quote?> GetRandomQuoteByTypeAsync(int duckId, QuoteType type);
+    // Admin funktioner
+    Task<IEnumerable<DuckDto>> GetAllDucksAsync();
+    Task<DuckDto?> GetDuckByIdAsync(int id);
+    Task<DuckDto> CreateDuckAsync(CreateDuckDto createDto);
+    Task<DuckDto?> UpdateDuckAsync(int id, UpdateDuckDto updateDto);
+    Task<bool> DeleteDuckAsync(int id);
+    Task<QuoteDto> AddQuoteAsync(int duckId, CreateQuoteDto createDto);
+    Task<QuoteDto?> UpdateQuoteAsync(int quoteId, UpdateQuoteDto updateDto);
+    Task<bool> DeleteQuoteAsync(int quoteId);
     
-    // Administrationsfunktionalitet
-    Task<Core.Models.Duck?> GetByIdAsync(int id);
-    Task<Core.Models.Duck> AddAsync(Core.Models.Duck duck);
-    Task<Core.Models.Duck?> UpdateAsync(Core.Models.Duck duck, bool updateQuotes = false);
-    Task<bool> DeleteAsync(int id);
+    // User funktioner
+    Task<IEnumerable<DuckPreviewDto>> GetAllDuckPreviewsAsync();
+    Task<DuckPreviewDto?> GetDuckPreviewAsync(int id);
+    Task<RandomQuoteDto?> GetRandomQuoteAsync(int duckId, QuoteType type);
 }
