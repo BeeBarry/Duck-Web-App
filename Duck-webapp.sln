@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duck.Core", "Duck.Core\Duck
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duck.Infrastructure", "Duck.Infrastructure\Duck.Infrastructure.csproj", "{49A3BAAC-2D87-4F97-9977-AC00BAFED080}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duck.Web", "Duck.Web\Duck.Web.csproj", "{7CCD4DCC-B731-4B45-9FE4-D674F0EB9F2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49A3BAAC-2D87-4F97-9977-AC00BAFED080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CCD4DCC-B731-4B45-9FE4-D674F0EB9F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CCD4DCC-B731-4B45-9FE4-D674F0EB9F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CCD4DCC-B731-4B45-9FE4-D674F0EB9F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CCD4DCC-B731-4B45-9FE4-D674F0EB9F2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
