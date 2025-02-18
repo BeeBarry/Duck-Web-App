@@ -29,17 +29,6 @@ obj/
 docker-compose.override.yml
 Dockerfile.local
 
-# React
-/node_modules
-/.pnp
-.pnp.js
-/coverage
-/build
-.DS_Store
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # IDE
 .idea/
 *.suo
@@ -70,3 +59,30 @@ logs/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 *.trx
+
+# Node.js / Vite / React / TypeScript specifikt
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.vite/
+dist/
+dist-ssr/
+*.tsbuildinfo
+.tsc-cache/
+coverage/
+storybook-static/
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# macOS specifikt
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
