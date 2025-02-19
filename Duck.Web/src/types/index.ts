@@ -8,7 +8,7 @@ export interface Duck {
 
 export enum QuoteType {
     Wise = "Wise",
-    comical = "Comical",
+    Comical = "Comical",
     Dark = "Dark"
 }
 
