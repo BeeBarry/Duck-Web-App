@@ -2,7 +2,7 @@ import { Duck, QuoteType, RandomQuote} from '../types';
 
 
 // URL för API
-const API_BASE_URL = 'https://localhost:7061/api';
+const API_BASE_URL = 'http://localhost:5115/api';
 
 // Hämta alla ankor och visa i UI
 export async function getAllDucks(): Promise<Duck[]> {
