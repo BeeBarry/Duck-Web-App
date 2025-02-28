@@ -24,30 +24,42 @@ builder.Services.Configure<JsonOptions>(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddCors(options =>
-
+// Jag har ersatt hela min tidigare CORS-konfiguration med denna:
+if (builder.Environment.IsDevelopment())
 {
-    options.AddPolicy("AllowLocal",
-        builder => builder
-            .WithOrigins("http://localhost:3000",
-                "http://localhost:5173"
-                ) // Om frontend körs på port 3000
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-});
+    // I utvecklingsmiljö - tillåter jag alla origins
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(builder =>
+            builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+    });
+}
+else
+{
+    // I produktionsmiljö - använder jag en begränsad policy med portar
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(builder =>
+            builder.WithOrigins("http://localhost:3000",
+                    "http://localhost:5173")
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+    });
+}
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
-app.UseCors("AllowLocal");
+
+
+// Jag har ersatt app.UseCors("AllowLocal") med detta:
+    app.UseCors();
 
 // DUCK endpoints
 app.MapGet("/api/ducks", async (IDuckRepository repository) =>
