@@ -2,13 +2,13 @@ import React from 'react';
 import { Duck } from '../types';
 
 // Uppdatera pathways när jag vet vart bilderna faktiskt ligger
-import daVinciiDuck from '../assets/da-vinci-duck.webp';
-import alanDuck from '../assets/bruce-duck.webp';
+import daVinciiDuck from '../assets/Da-vinci-duck.webp';
+import bruceDuck from '../assets/Bruce-duck.webp';
 
 // Mappa ankans ID till rätt bild
 const duckImages: Record<number, string> = {
     1: daVinciiDuck,
-    2: alanDuck,
+    2: bruceDuck,
 };
 
 // Fallbackbild om ID inte matchar någon bild
