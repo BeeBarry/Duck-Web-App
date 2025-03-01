@@ -29,10 +29,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Skapar databasmappen och ändrar sökvägen till /app/adata
+RUN mkdir -p /app/data && chmod 777 /app/data
+
 # Exponerar API-porten - jag har ändrat till 8080
 EXPOSE 8080
-
-# Skapar databasmapp
-RUN mkdir -p /app/Data 
 
 ENTRYPOINT ["dotnet", "Duck.Api.dll"]
