@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./Duck.Web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./Duck.Web:/app:ro  
+
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "5115:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/Duck.db
+    volumes:
+      - sqlite-data:/app/data  # Här monterar jag volymen till /app/data
+
+volumes:
+  sqlite-data:  # Här definierar jag volymen som kommer att vara persistent
