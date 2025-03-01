@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.Json.Serialization;
 using Duck.Core.DTOs.Duck;
 using Duck.Core.DTOs.Quote;
@@ -10,11 +11,28 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Registrerar services
+// Hämtar anslutningssträngen från konfigurationen
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Här kontrolleras och skapas databaskatalogen om den inte finns
+if (connectionString != null && connectionString.Contains("Data Source="))
+{
+    var dataSource = connectionString.Replace("Data Source=", "");
+    var directory = Path.GetDirectoryName(dataSource);
+    if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+    {
+        Directory.CreateDirectory(directory);
+        Console.WriteLine($"Skapade databaskatalog: {directory}");
+    }
+}
+
+
+
+// Registrerar services - Jag använder samma connectionString som tidigare
 builder.Services.AddDbContext<DuckContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"),
+    options.UseSqlite(connectionString,
         b => b.MigrationsAssembly("Duck.Infrastructure")
-        ));
+    ));
 builder.Services.AddScoped<IDuckRepository, DuckRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -51,6 +69,17 @@ else
 
 
 var app = builder.Build();
+
+// Automatisk databasmigration vid uppstart
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DuckContext>();
+    dbContext.Database.Migrate();
+    Console.WriteLine("Databas-migrationer har körts.");
+}
+
+
+
 
 // Configure the HTTP request pipeline.
     app.UseSwagger();
