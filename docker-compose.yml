@@ -10,7 +10,9 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./Duck.Web:/app:ro  
+      - ./Duck.Web:/app:ro
+    networks:
+      - duck-network
 
   backend:
     build:
@@ -23,6 +25,12 @@ services:
       - ConnectionStrings__DefaultConnection=Data Source=/app/data/Duck.db
     volumes:
       - sqlite-data:/app/data  # Här monterar jag volymen till /app/data
+    networks:
+      - duck-network
 
 volumes:
   sqlite-data:  # Här definierar jag volymen som kommer att vara persistent
+  
+networks:
+  duck-network:
+    driver: bridge
