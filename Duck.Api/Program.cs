@@ -5,11 +5,15 @@ using Duck.Core.DTOs.Quote;
 using Duck.Core.Interfaces;
 using Duck.Core.Models;
 using Duck.Infrastructure.Data;
+using Duck.Infrastructure.Data.Seeding;
 using Duck.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging();
 
 // Hämtar anslutningssträngen från konfigurationen
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -70,12 +74,28 @@ else
 
 var app = builder.Build();
 
-// Automatisk databasmigration vid uppstart
+// Automatisk databasmigration och seedning vid uppstart
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<DuckContext>();
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<DuckContext>();
+    
+    // Kör migrationer
     dbContext.Database.Migrate();
     Console.WriteLine("Databas-migrationer har körts.");
+    
+    try
+    {
+        // Kör seedning
+        var logger = services.GetRequiredService<ILogger<DuckDataSeeder>>();
+        var seeder = new DuckDataSeeder(dbContext, logger); // Referensen blev mycket kortare då vi använder logging.
+        seeder.SeedAsync().Wait(); // Använder .Wait() för detta är en synkron kontext?
+        Console.WriteLine("Databas har seedats med testdata.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ett fel uppstod under seedning av databasen: {ex.Message}");
+    }
 }
 
 
