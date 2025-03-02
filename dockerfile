@@ -2,19 +2,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Kopierar endast projektfiler först för att utnyttja Docker-cache bättre
-COPY ["*.sln", "./"]
-COPY ["Duck.Core/*.csproj", "Duck.Core/"]
-COPY ["Duck.Infrastructure/*.csproj", "Duck.Infrastructure/"]
-COPY ["Duck.Api/*.csproj", "Duck.Api/"]
+COPY . .
 
 # Återställer NuGet-paket
 RUN dotnet restore
 
-# Kopierar resten av koden för backend-projekten
-COPY Duck.Core/. Duck.Core/
-COPY Duck.Infrastructure/. Duck.Infrastructure/
-COPY Duck.Api/. Duck.Api/
 
 # Bygger projektet
 WORKDIR "/src/Duck.Api"
