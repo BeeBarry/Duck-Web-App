@@ -1,17 +1,17 @@
 import React from 'react';
 import { Duck } from '../types';
 
-// Uppdatera pathways när jag vet vart bilderna faktiskt ligger
+// Uppdaterar pathways när jag vet vart bilderna faktiskt ligger
 import daVinciiDuck from '../assets/Da-vinci-duck.webp';
 import bruceDuck from '../assets/Bruce-duck.webp';
 
-// Mappa ankans ID till rätt bild
+// Mappar ankans ID till rätt bild
 const duckImages: Record<number, string> = {
     1: daVinciiDuck,
     2: bruceDuck,
 };
 
-// Fallbackbild om ID inte matchar någon bild
+// fallback om ID inte matchar någon bild
 const defaultDuckImage = '/default-duck.png';
 
 interface DuckSelectorProps {
