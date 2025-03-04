@@ -1,17 +1,17 @@
 import React from 'react';
 import { Duck } from '../types';
 
-// Uppdaterar pathways när jag vet vart bilderna faktiskt ligger
-import daVinciiDuck from '../assets/Da-vinci-duck.webp';
-import bruceDuck from '../assets/Bruce-duck.webp';
+// Uppdatera pathways när jag vet vart bilderna faktiskt ligger
+import daVinciiDuck from '../assets/da-vinci-duck.webp';
+import alanDuck from '../assets/bruce-duck.webp';
 
-// Mappar ankans ID till rätt bild
+// Mappa ankans ID till rätt bild
 const duckImages: Record<number, string> = {
     1: daVinciiDuck,
-    2: bruceDuck,
+    2: alanDuck,
 };
 
-// fallback om ID inte matchar någon bild
+// Fallbackbild om ID inte matchar någon bild
 const defaultDuckImage = '/default-duck.png';
 
 interface DuckSelectorProps {
@@ -26,35 +26,40 @@ const DuckSelector: React.FC<DuckSelectorProps> = ({
                                                        onSelect
                                                    }) => {
     return (
-        <div className="grid grid-cols-2 gap-6">
-            {ducks.map((duck) => (
-                <div
-                    key={duck.id}
-                    onClick={() => onSelect(duck.id)}
-                    className={`
-                        cursor-pointer overflow-hidden
-                        bg-white border-3 border-black rounded-lg
-                        ${selectedDuckId === duck.id
-                        ? 'bg-gray-100'
-                        : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]'
-                    }
-                    `}
-                >
-                    <div className="relative pb-[80%] overflow-hidden">
-                        <img
-                            src={duckImages[duck.id] || defaultDuckImage}
-                            alt={`${duck.name} anka`}
-                            className="absolute inset-0 w-full h-full object-cover"
-                        />
-                    </div>
+        <div className="mb-8">
+            <h2 className="text-xl font-bold uppercase mb-4"></h2>
 
-                    <div className="p-5 border-t-3 border-black">
-                        <h3 className="font-bold text-lg mb-2">{duck.name}</h3>
-                        <p className="text-md mb-3">{duck.specialty}</p>
-                        <p className="text-sm italic mt-1">"{duck.motto}"</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {ducks.map((duck) => (
+                    <div
+                        key={duck.id}
+                        onClick={() => onSelect(duck.id)}
+                        className={`
+                            cursor-pointer
+                            bg-white border-3 border-black rounded-xl
+                            transform transition-all duration-200
+                            ${selectedDuckId === duck.id
+                            ? 'ring-4 ring-[#FF3B3B] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]'
+                            : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.8)]'
+                        }
+                        `}
+                    >
+                        <div className="aspect-square overflow-hidden">
+                            <img
+                                src={duckImages[duck.id] || defaultDuckImage}
+                                alt={`${duck.name} anka`}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        <div className="p-4 border-t-3 border-black">
+                            <h3 className="font-bold text-lg mb-1">{duck.name}</h3>
+                            <p className="text-sm text-gray-700 mb-2">{duck.specialty}</p>
+                            <p className="text-xs italic text-gray-600">"{duck.motto}"</p>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 };
