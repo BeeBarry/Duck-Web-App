@@ -69,7 +69,7 @@ function App() {
             <div className="w-full max-w-4xl mx-auto px-6">
                 <header className="text-center mb-10">
                     <h1 className="text-4xl font-black uppercase mb-3">Duck Quotes</h1>
-                    <p className="text-black">Visdom från våra kloka ankor</p>
+                    <p className="text-black">Ankor som hjälper dig förstå IT</p>
                 </header>
 
                 <main className="bg-white rounded-xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] p-8">
