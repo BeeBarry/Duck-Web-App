@@ -13,6 +13,9 @@ RUN npm ci
 # Kopierar resten av applikationen
 COPY . .
 
+# Sätter API URL för byggtiden
+ENV VITE_API_URL=http://localhost:5115/api
+
 # Bygger applikationen
 RUN npm run build
 
