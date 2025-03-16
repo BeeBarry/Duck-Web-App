@@ -65,51 +65,62 @@ function App() {
     const isQuackDisabled = !selectedDuck || !selectedQuoteType;
 
     return (
-        <div className="min-h-screen w-full bg-[#FFB800] py-8 flex justify-center">
-            <div className="w-full max-w-4xl mx-auto px-6">
-                <header className="text-center mb-10">
-                    <h1 className="text-4xl font-black uppercase mb-3">Duck Quotes</h1>
-                    <p className="text-black">Ankor som hjälper dig förstå IT</p>
-                </header>
+        <div className="min-h-screen bg-[#FFB800] py-10 px-4 flex justify-center">
+            <div className="max-w-4xl w-full">
+                {/* Huvudrubrik - svart text utan ruta */}
+                <div className="text-center mb-16">
+                    <h1 className="text-5xl font-black text-black">
+                        DUCK QUOTES
+                    </h1>
+                </div>
 
-                <main className="bg-white rounded-xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] p-8">
-                    <div className="mb-10">
-                        <h2 className="text-xl font-bold uppercase mb-6">Välj en anka</h2>
-                        <DuckSelector
-                            ducks={ducks}
-                            selectedDuckId={selectedDuck}
-                            onSelect={handleDuckSelect}
-                        />
-                    </div>
+                {/* Sektion: Välj anka */}
+                <div className="mb-12 flex flex-col items-center">
+                    <h2 className="text-xl font-bold bg-[#4CAF50] text-white p-6 rounded-lg border-4 border-black mb-6 min-w-[260px] min-h-[50px] text-center flex items-center justify-center">
+                        VÄLJ EN ANKA
+                    </h2>
+                    <DuckSelector
+                        ducks={ducks}
+                        selectedDuckId={selectedDuck}
+                        onSelect={handleDuckSelect}
+                    />
+                </div>
 
-                    <div className="mb-10">
-                        <h2 className="text-xl font-bold uppercase mb-6">Välj typ av citat</h2>
-                        <QuoteTypeSelector
-                            selectedType={selectedQuoteType}
-                            onSelect={handleQuoteTypeSelect}
-                        />
-                    </div>
+                {/* Sektion: Välj citattyp */}
+                <div className="mb-12 flex flex-col items-center">
+                    <h2 className="text-xl font-bold bg-[#2196F3] text-white p-6 rounded-lg border-4 border-black mb-6 min-w-[260px] min-h-[50px] text-center flex items-center justify-center">
+                        VÄLJ CITAT TYP
+                    </h2>
+                    <QuoteTypeSelector
+                        selectedType={selectedQuoteType}
+                        onSelect={handleQuoteTypeSelect}
+                    />
+                </div>
 
-                    {/* Quack-knapp flyttad före citatsektionen */}
-                    <div className="mb-10">
-                        <QuackButton
-                            onClick={handleQuackClick}
-                            disabled={isQuackDisabled}
-                            isLoading={isLoading}
-                        />
-                    </div>
+                {/* Sektion: Quack-knapp */}
+                <div className="mb-12">
+                    <QuackButton
+                        onClick={handleQuackClick}
+                        disabled={isQuackDisabled}
+                        isLoading={isLoading}
+                    />
+                </div>
 
-                    <div>
-                        <h2 className="text-xl font-bold uppercase mb-6">Din ankvisdom</h2>
-                        <QuoteDisplay
-                            quote={currentQuote}
-                            isLoading={isLoading}
-                        />
-                    </div>
-                </main>
+                {/* Sektion: Citatdisplay */}
+                <div>
+                    <QuoteDisplay
+                        quote={currentQuote}
+                        isLoading={isLoading}
+                    />
+                </div>
             </div>
         </div>
     );
 }
+
+
+
+
+
 
 export default App;
