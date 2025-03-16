@@ -1,20 +1,20 @@
+/* Grundläggande stilar för neobrutalistisk design */
 
+/* Import av Inter-typsnitt för stöd till brutalistisk stil */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
-
-/* Anpassad border-bredd för Tailwind */
-.border-3 {
-  border-width: 3px;
+/* Anpassad tjockare border för Tailwind */
+.border-4 {
+  border-width: 4px;
 }
 
-/* Grundläggande hover för knappar */
+/* Grundläggande hover-effekt för knappar */
 button:hover:not(:disabled) {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8) !important;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8) !important;
 }
 
-/* Grundläggande aktiva tillstånd för knappar */
+/* Grundläggande active-tillstånd för knappar */
 button:active:not(:disabled) {
   transform: translate(4px, 4px);
   box-shadow: none !important;
