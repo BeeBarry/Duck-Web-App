@@ -38,6 +38,7 @@ public class DuckRepository : IDuckRepository
                     {
                         Id = q.QuoteId,
                         Content = q.Content,
+                        Explanation = q.Explanation,
                         Type = q.Type
                     })
                     .ToList(),
@@ -47,6 +48,7 @@ public class DuckRepository : IDuckRepository
                     {
                         Id = q.QuoteId,
                         Content = q.Content,
+                        Explanation = q.Explanation,
                         Type = q.Type
                     })
                     .ToList(),
@@ -56,6 +58,7 @@ public class DuckRepository : IDuckRepository
                     {
                         Id = q.QuoteId,
                         Content = q.Content,
+                        Explanation = q.Explanation,
                         Type = q.Type
                     })
                     .ToList()
@@ -86,6 +89,7 @@ public class DuckRepository : IDuckRepository
                     {
                         Id = q.QuoteId,
                         Content = q.Content,
+                        Explanation = q.Explanation,
                         Type = q.Type
                     })
                     .ToList(),
@@ -95,6 +99,7 @@ public class DuckRepository : IDuckRepository
                     {
                         Id = q.QuoteId,
                         Content = q.Content,
+                        Explanation = q.Explanation,
                         Type = q.Type
                     })
                     .ToList(),
@@ -104,6 +109,7 @@ public class DuckRepository : IDuckRepository
                     {
                         Id = q.QuoteId,
                         Content = q.Content,
+                        Explanation = q.Explanation,
                         Type = q.Type
                     })
                     .ToList()
@@ -180,6 +186,7 @@ public class DuckRepository : IDuckRepository
         var quote = new Quote
         {
             Content = createDto.Content,
+            Explanation = createDto.Explanation,
             Type = createDto.Type,
             DuckId = duckId
         };
@@ -190,6 +197,7 @@ public class DuckRepository : IDuckRepository
         return new QuoteDto
         {
             Id = quote.QuoteId,
+            Explanation = createDto.Explanation,
             Content = quote.Content,
             Type = quote.Type
         };
@@ -201,12 +209,14 @@ public class DuckRepository : IDuckRepository
         if (quote == null) return null;
 
         quote.Content = updateDto.Content;
+        quote.Explanation = updateDto.Explanation;
         await _context.SaveChangesAsync();
 
         return new QuoteDto
         {
             Id = quote.QuoteId,
             Content = quote.Content,
+            Explanation = quote.Explanation,
             Type = quote.Type
         };
     }
@@ -270,6 +280,7 @@ public class DuckRepository : IDuckRepository
         return new RandomQuoteDto
         {
             Content = randomQuote.Content,
+            Explanation = randomQuote.Explanation,
             DuckName = randomQuote.Duck.Name,
             Type = randomQuote.Type
         };
