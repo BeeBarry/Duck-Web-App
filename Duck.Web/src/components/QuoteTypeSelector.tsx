@@ -1,6 +1,9 @@
 import React from 'react';
 import { QuoteType } from '../types';
 
+
+const isMvpMode = true; // Sätt till false för att visa alla quote-typer
+
 interface QuoteTypeSelectorProps {
     selectedType: QuoteType | null;
     onSelect: (type: QuoteType) => void;
@@ -10,7 +13,7 @@ const QuoteTypeSelector: React.FC<QuoteTypeSelectorProps> = ({
                                                                  selectedType,
                                                                  onSelect
                                                              }) => {
-    // Testar emojis som design
+    // Jag testar emojis som design
     const typeConfig = {
         [QuoteType.Wise]: {
             icon: "🧠",
@@ -26,9 +29,14 @@ const QuoteTypeSelector: React.FC<QuoteTypeSelectorProps> = ({
         }
     };
 
+    // Filtrera vilka quote-typer som ska visas
+    const displayedTypes = isMvpMode
+        ? [QuoteType.Wise]
+        : Object.values(QuoteType);
+
     return (
         <div className="grid grid-cols-3 gap-4 md:gap-6">
-            {Object.values(QuoteType).map((type) => (
+            {displayedTypes.map((type) => (
                 <button
                     key={type}
                     onClick={() => onSelect(type)}
