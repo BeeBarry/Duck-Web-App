@@ -14,6 +14,7 @@ export enum QuoteType {
 
 export interface RandomQuote {
     content: string;
+    explanation?: string;
     duckName: string;
     type: QuoteType;
 }
